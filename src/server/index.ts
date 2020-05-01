@@ -8,7 +8,7 @@
 import Express from 'express';
 import fs from 'fs';
 import { Dept } from './status';
-import { modifyUserStatus, addDept } from './operation';
+import { modifyUserStatus, addDept, addUser, DatAddUser, DatAddDept, DatMoveUser, moveUser } from './operation';
 
 //
 // init
@@ -23,9 +23,12 @@ if (fs.existsSync(deptFile)) {
 } else {
   dept = new Dept();
   dept.name = "Dept";
-  fs.writeFileSync(deptFile, JSON.stringify(dept));
+  save();
 }
 
+function save() {
+  fs.writeFileSync(deptFile, JSON.stringify(dept));
+}
 
 //
 // config
@@ -46,16 +49,32 @@ app.post(prefix + '/refresh', (req, res) => {
 app.post(prefix + '/modifyUserStatus', (req, res) => {
   const user = req.body;
   modifyUserStatus(dept, user);
+  save();
   res.send(dept);
 });
 
+// {"name": "ueno", "status": "Here"}
 app.post(prefix + '/addDept', (req, res) => {
-  const addInfo = req.body;
+  const addInfo = req.body as DatAddDept;
   addDept(dept, addInfo);
+  save();
   res.send(dept);
 });
 
+// {"dept": ["Dept"], "name": "ueno"}
+app.post(prefix + '/addUser', (req, res) => {
+  const addInfo = req.body as DatAddUser;
+  addUser(dept, addInfo);
+  save();
+  res.send(dept);
+});
 
+app.post(prefix + '/moveUser', (req, res) => {
+  const moveInfo = req.body as DatMoveUser;
+  moveUser(dept, moveInfo);
+  save();
+  res.send(dept);
+});
 
 
 
