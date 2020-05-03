@@ -2,8 +2,14 @@
 <html>
 <head>
 <title>Are You Here?</title>
+<script src="js/client.js"></script>
 </head>
 <body>
-<p>Are you here?</p>
+<div id="app"><div>
+<script>
+    Elm.Main.init({
+      node: document.getElementById('app')
+    });
+</script>
 </body>
 </html>

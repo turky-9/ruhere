@@ -35,6 +35,7 @@ function save() {
 //
 const prefix = '/api';
 app.use(Express.json());
+app.use('/js', Express.static('dist/js'))
 
 app.get('/', function(req, res){
     res.sendFile('index.html', { root: __dirname + '' } );
