@@ -31,6 +31,56 @@ class Just<T> {
 
 type Maybe<T> = Just<T> | Nothing<T>;
 
+function mmap<T1, T2>(arg: Maybe<T1>, f: (x: T1) => T2): Maybe<T2> {
+  let newVal: Maybe<T2> = Nothing;
+  arg.with((x: T1) => {
+    newVal = new Just(f(x));
+  }, () => {});
+  return newVal;
+}
+
+
+//****************************************************************************
+// Result
+//****************************************************************************
+enum EResult {
+  Ok = 'Ok',
+  Err = 'Err'
+}
+class Ok<T> {
+  public kind = EResult.Ok;
+  private value: T;
+  constructor(x: T) {
+    this.value = x;
+  }
+
+  public with(ok: (x: T) => void, err: (x: any) => void) {
+    return ok(this.value);
+  }
+}
+class Err<T> {
+  public kind = EResult.Err;
+  private value: T;
+  constructor(x: T) {
+    this.value = x;
+  }
+  public with(ok: (x: any) => void, err: (x: T) => void) {
+    return err(this.value);
+  }
+}
+type Result<T, S> = Ok<T> | Err<S>
+
+
+function rmap<T1, T2, T3>(arg: Result<T1, T2>, f: (x: T1) => T3): Result<T3, T2> {
+  let newVal: Result<T3, T2> = arg as Err<T2>;
+  arg.with((x: T1) => {
+    newVal = new Ok(f(x));
+  }, (x: T2) => {
+    newVal = arg as Err<T2>;
+  });
+
+  return newVal;
+}
 
 
 // ****************************************************************************
