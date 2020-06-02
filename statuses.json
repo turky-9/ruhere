@@ -1,1 +1,53 @@
-{"name":"Dept","users":[{"name":"haru","status":"Here"}],"children":[{"name":"Daizu","users":[{"name":"ueno","status":"Here"}],"children":[]}]}
+{
+  "name": "Dept",
+  "users": [
+    {
+      "name": "haru",
+      "status": "Here"
+    }
+  ],
+  "children": [
+    {
+      "name": "Daizu",
+      "users": [
+        {
+          "name": "ueno",
+          "status": "Here"
+        }
+      ],
+      "children": [
+        {
+          "name": "Shiro",
+          "users": [
+            {
+              "name": "ueno",
+              "status": "Here"
+            }
+          ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Shiba",
+      "users": [
+        {
+          "name": "hoge",
+          "status": "Out"
+        }
+      ],
+      "children": [
+        {
+          "name": "Inu",
+          "users": [
+            {
+              "name": "ueno",
+              "status": "Here"
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

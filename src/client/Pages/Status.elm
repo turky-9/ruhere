@@ -70,6 +70,12 @@ update msg model =
                     Debug.log ("@Status.update MsgGotReload Err: " ++ Debug.toString err) ( model, Cmd.none )
 
 
+
+-- ############################################################################
+-- view
+-- ############################################################################
+
+
 view : Model -> Html.Html Msg
 view model =
     Html.div [ Attributes.style "display" "flex" ]
@@ -82,10 +88,53 @@ view model =
 
 
 renderDept : Dept -> Html.Html msg
+
+
+
+-- renderDept dept =
+--     Html.ul []
+--         [ Html.li []
+--             ( Html.text dept.name
+--             :: [ Html.ul [] (List.map renderChildDept (getListDept dept.children)) ]
+--             )
+--         ]
+
+
 renderDept dept =
+    let
+        template : String -> Html.Html msg -> List (Html.Html msg) -> Html.Html msg
+        template self child bro =
+            Html.ul []
+                (Html.li []
+                    (Html.text self :: [ child ])
+                    :: bro
+                )
+    in
     Html.ul []
         [ Html.li [] [ Html.text dept.name ]
         ]
+
+
+renderDeptChildren : List Dept -> Html.Html msg
+renderDeptChildren depts =
+    case depts of
+        x :: xs ->
+            Html.li [] [ Html.text x.name ]
+
+        [] ->
+            Html.text ""
+
+
+getListDept : Depts -> List Dept
+getListDept d =
+    case d of
+        Depts x ->
+            x
+
+
+renderChildDept : Dept -> Html.Html msg
+renderChildDept child =
+    Html.li [] [ Html.text child.name ]
 
 
 renderUsers : List User -> Html.Html msg
@@ -144,6 +193,12 @@ statusDecoder =
                 case str of
                     "Here" ->
                         Decode.succeed Here
+
+                    "Out" ->
+                        Decode.succeed Out
+
+                    "Meeting" ->
+                        Decode.succeed Meeting
 
                     x ->
                         Decode.fail <| "Unknown Status" ++ x
