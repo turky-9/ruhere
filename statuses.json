@@ -1,1 +1,1 @@
-{"name":"Dept","users":[],"parent":null,"children":[{"name":"Daizu","users":[{"name":"ueno","status":"Here"}],"parent":null,"children":[]}]}
+{"name":"Dept","users":[{"name":"haru","status":"Here"}],"children":[{"name":"Daizu","users":[{"name":"ueno","status":"Here"}],"children":[]}]}

@@ -83,7 +83,7 @@ update msg model =
     in
     case (msg, model) of
         ( MsgStatus subMsg, ModelStatus subModel) ->
-            PageStatus.update subMsg subModel |> Debug.log ("update1: " ++ debug) |> updateWith  ModelStatus MsgStatus
+            Debug.log ("@Main.update: " ++ debug) PageStatus.update subMsg subModel |> sub2MainUpdate ModelStatus MsgStatus 
 
         ( _, _ ) ->
             -- Disregard messages that arrived for the wrong page.
@@ -92,8 +92,8 @@ update msg model =
 {-
     サブモデルとサブメッセージからMainのモデルとメッセージに変換
 -}
-updateWith : (subModel -> Model) -> (subMsg -> Msg) -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
-updateWith toModel toMsg ( subModel, subCmd ) =
+sub2MainUpdate : (subModel -> Model) -> (subMsg -> Msg) -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
+sub2MainUpdate toModel toMsg ( subModel, subCmd ) =
     ( toModel subModel
     , Cmd.map toMsg subCmd
     )
@@ -103,21 +103,23 @@ updateWith toModel toMsg ( subModel, subCmd ) =
 -- ############################################################################
 view : Model -> Html.Html Msg
 view model =
-    let
-        {-
-          サブメッセージからMainのメッセージに変換
-        -}
-        viewPage : (a -> Msg)  -> Html.Html a -> Html.Html Msg
-        viewPage toMsg html =  Html.map toMsg html
-    in
     case model of
         {-
           Mainのモデルからサブモデルにパターンマッチ
         -}
-        _ -> Html.div [ Attributes.class "hoge" ]
+        ModelStatus stat ->
+            Debug.log ("@Main.view: " ++ (Debug.toString model))
+            Html.div [ Attributes.class "hoge" ]
              [ Nav.view
-             , PageStatus.view |> viewPage MsgStatus
+             , PageStatus.view stat |> sub2MainView MsgStatus
              ]
+
+{-
+    サブメッセージからMainのメッセージに変換
+-}
+sub2MainView : (a -> Msg)  -> Html.Html a -> Html.Html Msg
+sub2MainView toMsg html =  Html.map toMsg html
+
 
 
 -- ############################################################################

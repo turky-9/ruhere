@@ -15,6 +15,5 @@ export class User {
 export class Dept {
     public name: string = '';
     public users: User[] = [];
-    public parent: Dept | null = null;
     public children: Dept[] = [];
 }
