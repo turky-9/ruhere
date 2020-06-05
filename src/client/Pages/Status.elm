@@ -81,48 +81,30 @@ view model =
     Html.div [ Attributes.style "display" "flex" ]
         [ Html.div []
             [ Html.button [ Events.onClick MsgReload ] [ Html.text "Reload" ]
-            , renderDept model
+            , renderDept [ model ]
             ]
         , Html.div [] [ renderUsers model.users ]
         ]
 
 
-renderDept : Dept -> Html.Html msg
-
-
-
--- renderDept dept =
---     Html.ul []
---         [ Html.li []
---             ( Html.text dept.name
---             :: [ Html.ul [] (List.map renderChildDept (getListDept dept.children)) ]
---             )
---         ]
-
-
-renderDept dept =
-    let
-        template : String -> Html.Html msg -> List (Html.Html msg) -> Html.Html msg
-        template self child bro =
-            Html.ul []
-                (Html.li []
-                    (Html.text self :: [ child ])
-                    :: bro
-                )
-    in
-    Html.ul []
-        [ Html.li [] [ Html.text dept.name ]
-        ]
-
-
-renderDeptChildren : List Dept -> Html.Html msg
-renderDeptChildren depts =
+renderDept : List Dept -> Html.Html msg
+renderDept depts =
     case depts of
         x :: xs ->
-            Html.li [] [ Html.text x.name ]
+            Html.ul [] (renderDeptChildren depts [])
 
         [] ->
             Html.text ""
+
+
+renderDeptChildren : List Dept -> List (Html.Html msg) -> List (Html.Html msg)
+renderDeptChildren depts result =
+    case depts of
+        x :: xs ->
+            renderDeptChildren xs (Html.li [] [ Html.text x.name, renderDept (getListDept x.children) ] :: result)
+
+        [] ->
+            List.reverse result
 
 
 getListDept : Depts -> List Dept
@@ -130,11 +112,6 @@ getListDept d =
     case d of
         Depts x ->
             x
-
-
-renderChildDept : Dept -> Html.Html msg
-renderChildDept child =
-    Html.li [] [ Html.text child.name ]
 
 
 renderUsers : List User -> Html.Html msg

@@ -46,6 +46,16 @@
             }
           ],
           "children": []
+        },
+        {
+          "name": "Ken",
+          "users": [
+            {
+              "name": "ueno",
+              "status": "Here"
+            }
+          ],
+          "children": []
         }
       ]
     }
