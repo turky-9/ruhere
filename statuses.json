@@ -2,7 +2,7 @@
   "name": "Dept",
   "users": [
     {
-      "name": "haru",
+      "name": "dept-haru",
       "status": "Here"
     }
   ],
@@ -11,7 +11,7 @@
       "name": "Daizu",
       "users": [
         {
-          "name": "ueno",
+          "name": "daizu-ueno",
           "status": "Here"
         }
       ],
@@ -20,7 +20,7 @@
           "name": "Shiro",
           "users": [
             {
-              "name": "ueno",
+              "name": "shiro-ueno",
               "status": "Here"
             }
           ],
@@ -32,7 +32,7 @@
       "name": "Shiba",
       "users": [
         {
-          "name": "hoge",
+          "name": "shiba-hoge",
           "status": "Out"
         }
       ],
@@ -41,7 +41,7 @@
           "name": "Inu",
           "users": [
             {
-              "name": "ueno",
+              "name": "inu-ueno",
               "status": "Here"
             }
           ],
@@ -51,7 +51,7 @@
           "name": "Ken",
           "users": [
             {
-              "name": "ueno",
+              "name": "ken-ueno",
               "status": "Here"
             }
           ],
