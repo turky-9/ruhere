@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 -- import Browser.Navigation as Navigation
 
@@ -6,6 +6,7 @@ import Browser
 import Debug
 import Html
 import Html.Attributes as Attributes
+import Html.Events as Events
 import Nav exposing (..)
 import Pages.Status as PageStatus
 import Url
@@ -52,6 +53,8 @@ type alias Flags =
 
 type Msg
     = Msg
+    | MsgToJs
+    | MsgFromJs String
     | MsgStatus PageStatus.Msg
 
 
@@ -72,6 +75,11 @@ init _ =
     ( ModelStatus PageStatus.init, Cmd.none )
 
 
+-- ############################################################################
+-- ports
+-- ############################################################################
+port toJs : String -> Cmd msg
+port fromJs : (String -> msg) -> Sub msg
 
 -- ############################################################################
 -- subscriptions
@@ -80,7 +88,7 @@ init _ =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.none
+    fromJs MsgFromJs
 
 
 
@@ -98,6 +106,12 @@ update msg model =
     case ( msg, model ) of
         ( MsgStatus subMsg, ModelStatus subModel ) ->
             Debug.log ("@Main.update: " ++ debug) PageStatus.update subMsg subModel |> sub2MainUpdate ModelStatus MsgStatus
+
+        ( MsgToJs, _ ) ->
+            ( model, toJs "from Elm to Js" )
+
+        ( MsgFromJs s, _ ) ->
+            ( model, Cmd.none ) |> Debug.log("from js: " ++ s)
 
         ( _, _ ) ->
             -- Disregard messages that arrived for the wrong page.
@@ -133,7 +147,9 @@ view model =
             Debug.log ("@Main.view: " ++ Debug.toString model)
                 Html.div
                 [ Attributes.class "hoge" ]
-                [ Nav.view
+                [ Html.div []
+                    [ Html.button [ Events.onClick MsgToJs ] [Html.text "to Js"]]
+                , Nav.view
                 , PageStatus.view stat |> sub2MainView MsgStatus
                 ]
 
